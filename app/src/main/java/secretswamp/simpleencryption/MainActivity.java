@@ -25,9 +25,10 @@ public class MainActivity extends AppCompatActivity {
         KeyPair kp = PGPUtils.generateKeyPair();
         if(!pref.contains("pub-key") || !pref.contains("priv-key")) {
             SharedPreferences.Editor editor = pref.edit();
-            editor.putString("pub-key", kp.getPublic().toString());
-            editor.putString("priv-key", kp.getPrivate().toString());
+            editor.putString("pub-key", PGPUtils.encodeKey(kp.getPublic()));
+            editor.putString("priv-key", PGPUtils.encodeKey(kp.getPrivate()));
             editor.commit();
+
         }
     }
 
