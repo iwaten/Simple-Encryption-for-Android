@@ -1,6 +1,6 @@
 package secretswamp.simpleencryption.pgp;
 
-import org.spongycastle.bcpg.ArmoredOutputStream;
+/*
 import org.spongycastle.bcpg.HashAlgorithmTags;
 import org.spongycastle.openpgp.PGPEncryptedData;
 import org.spongycastle.openpgp.PGPKeyPair;
@@ -12,6 +12,7 @@ import org.spongycastle.openpgp.operator.jcajce.JcaPGPContentSignerBuilder;
 import org.spongycastle.openpgp.operator.jcajce.JcaPGPDigestCalculatorProviderBuilder;
 import org.spongycastle.openpgp.operator.jcajce.JcaPGPKeyPair;
 import org.spongycastle.openpgp.operator.jcajce.JcePBESecretKeyEncryptorBuilder;
+ */
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -21,12 +22,13 @@ import java.security.Security;
 import java.util.Date;
 
 /**
+ * GenerateKeyPair
  * Generates a PGP public key and secret keypair using RSA.
  * Useful if they have not been generated.
  */
 
 public class GenerateKeyPair {
-
+/*
     static {
         Security.insertProviderAt(new org.spongycastle.jce.provider.BouncyCastleProvider(), 1);
     }
@@ -68,5 +70,6 @@ public class GenerateKeyPair {
         privateKeyStream.close();
         publicKeyStream.close();
     }
+    */
 }
 

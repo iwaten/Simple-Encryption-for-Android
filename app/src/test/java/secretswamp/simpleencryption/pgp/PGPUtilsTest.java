@@ -1,23 +1,14 @@
-package secretswamp.simpleencryption;
+package secretswamp.simpleencryption.pgp;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.os.Bundle;
-
+import org.junit.Test;
 import java.security.KeyPair;
 
-import secretswamp.simpleencryption.pgp.PGPUtils;
+import static org.junit.Assert.*;
 
-public class MainActivity extends AppCompatActivity {
+public class PGPUtilsTest {
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        bruh();
-    }
-
-    private void bruh() {
+    @Test
+    public void main() {
         String data = "dshfasdfsdlfs";
         KeyPair aliceKeyPair = PGPUtils.generateUserKeyPair();
         KeyPair bobKeyPair = PGPUtils.generateUserKeyPair();
@@ -30,6 +21,6 @@ public class MainActivity extends AppCompatActivity {
         System.out.println("The encrypted message in transit is: \n" + encryptedMessage);
 
         String decryptedMessage = PGPUtils.decryptMessage(encryptedMessage, bobKeyPair.getPrivate());
-        System.out.println("The message after bob decrypts is: \n" + decryptedMessage);
+        System.out.println("The message after bob decrypts is: ");
     }
 }
