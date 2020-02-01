@@ -1,18 +1,18 @@
 package secretswamp.simpleencryption.com.tabian.tabfragments;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
+import secretswamp.simpleencryption.pgp.PGPUtils;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-/**
- * Created by User on 2/28/2017.
- */
 
 public class Tab3Fragment extends Fragment {
     private static final String TAG = "Tab3Fragment";
@@ -29,6 +29,11 @@ public class Tab3Fragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Toast.makeText(getActivity(), "TESTING BUTTON CLICK 3",Toast.LENGTH_SHORT).show();
+                SharedPreferences pref = getActivity().getSharedPreferences("pref", Context.MODE_PRIVATE);
+                // Get data from "unencrypted message" text box here (message = ...)
+                // Get data from the "recipient public key" text box here (pubKey = ...)
+                String encMessage = PGPUtils.encryptMessage(message, pubKey);
+                // Should update the "encrypted message" text box here with encMessage
             }
         });
 
