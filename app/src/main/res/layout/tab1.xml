@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/btnTEST"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="GENERATE!"/>
+
+    <EditText
+        android:id="@+id/generatedKey"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnTEST"
+        android:hint="Your public key (share this with your peer!)" />
+
+<!--    <EditText-->
+<!--        android:id="@+id/generatedPrivateKey"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_below="@+id/generatedKey"-->
+<!--        android:hint="Your private key (keep this private!)" />-->
+
+</RelativeLayout>
