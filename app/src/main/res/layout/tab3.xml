@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnTEST3"
+        android:text="ENCRYPT!"/>
+
+    <EditText
+        android:id="@+id/pubkeyEditText"
+        android:hint="Peer's public key"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnTEST3"/>
+
+    <EditText
+        android:id="@+id/userinputEditText"
+        android:hint="Message you want to encrypt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/pubkeyEditText"/>
+
+    <EditText
+        android:id="@+id/outputEditText"
+        android:hint="Encrypted output"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/userinputEditText"/>
+
+
+</RelativeLayout>
