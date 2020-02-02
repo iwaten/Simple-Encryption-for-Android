@@ -53,7 +53,7 @@ public class PGPUtils {
             byte[] encryptedData = dataCipher.doFinal(inputData);
 
             // Encrypt the key itself with the recipient's public key
-            String encryptedSecretKey = encryptSecretKey(generateKeyOperationCipher(), recipientPublicKey, secretKey);
+            String encryptedSecretKey = encryptSecretKey(recipientPublicKey, secretKey);
 
             // Final message to transmit contains the data and the encrypted secret key
             output = encryptedSecretKey + "," + Base64.encodeToString(encryptedData, Base64.DEFAULT);
@@ -74,7 +74,7 @@ public class PGPUtils {
             String base64EncryptedData= encryptedMessage.substring(splitIndex+1);
 
             // Decrypt the key with own private key
-            SecretKey secretKey = decryptSecretKey(generateKeyOperationCipher(), myPrivateKey, encryptedSecretKey);
+            SecretKey secretKey = decryptSecretKey(myPrivateKey, encryptedSecretKey);
 
             // Decrypt the data portion of the message
             Cipher dataCipher = generateDataOperationCipher();
@@ -104,22 +104,13 @@ public class PGPUtils {
         return keys;
     }
 
-    private static Cipher generateKeyOperationCipher(){
-        Cipher cipher = null;
-        try{
-            cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
-        }catch(GeneralSecurityException e){
-            e.printStackTrace();
-        }
-        return cipher;
-    }
-
-    private static String encryptSecretKey(Cipher keyCipher,Key publicKey,SecretKey secretKey){
+    private static String encryptSecretKey(Key publicKey,SecretKey secretKey){
         String output = "";
         try{
-            keyCipher.init(Cipher.ENCRYPT_MODE,publicKey);
+            Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
+            cipher.init(Cipher.ENCRYPT_MODE, publicKey);
             byte[] inputData = secretKey.getEncoded();
-            byte[] encryptedKey = keyCipher.doFinal(inputData);
+            byte[] encryptedKey = cipher.doFinal(inputData);
             output = Base64.encodeToString(encryptedKey, Base64.DEFAULT);
         }catch(GeneralSecurityException e){
             e.printStackTrace();
@@ -127,22 +118,22 @@ public class PGPUtils {
         return output;
     }
 
-    private static SecretKey decryptSecretKey(Cipher keyCipher, Key privateKey, String encryptedData){
-        SecretKey output = null;
-        try{
-            keyCipher.init(Cipher.DECRYPT_MODE, privateKey);
+    private static SecretKey decryptSecretKey(Key privateKey, String encryptedData){
+        try {
+        Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
+            cipher.init(Cipher.DECRYPT_MODE, privateKey);
             byte[] inputData = Base64.decode(encryptedData, Base64.DEFAULT);
-            byte[] decryptedData = keyCipher.doFinal(inputData);
-            output = new SecretKeySpec(decryptedData,"AES");
+            byte[] decryptedData = cipher.doFinal(inputData);
+            return new SecretKeySpec(decryptedData,"AES");
         }catch(GeneralSecurityException e){
             e.printStackTrace();
         }
-        return output;
+        return null;
     }
 
     private static SecureRandom getRandomnessInstance(){
         SecureRandom random = new SecureRandom();
-        byte bytes[] = new byte[124];
+        byte bytes[] = new byte[32];
         random.nextBytes(bytes);
         return random;
     }

@@ -15,13 +15,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/btnTEST"
-        android:hint="Your public key (share this with your peer!)" />
+        android:hint="Your PUBLIC key (share this with your peer!)" />
 
     <EditText
         android:id="@+id/generatedPrivateKey"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/generatedKey"
-        android:hint="Your private key (keep this private!)" />
+        android:hint="Your PRIVATE key (keep this private!)" />
 
 </RelativeLayout>

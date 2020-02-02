@@ -41,7 +41,6 @@ public class Tab2Fragment extends Fragment {
     }
 
     public void bruh() {
-        Toast.makeText(getActivity(), "TESTING BUTTON CLICK 2",Toast.LENGTH_SHORT).show();
         SharedPreferences pref = getActivity().getSharedPreferences("pref", Context.MODE_PRIVATE);
         // Get data from "encrypted message" text box here (message = ...)
         String message;
