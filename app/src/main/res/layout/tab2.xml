@@ -4,19 +4,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:textSize="25sp"
-        android:text="Tab2"
-        android:layout_marginTop="40dp"
-        android:id="@+id/textTab2"/>
-
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/btnTEST2"
-        android:text="TESTBTN 2"/>
+        android:text="DECRYPT!"/>
+
+    <EditText
+        android:id="@+id/encryptedEditText"
+        android:hint="Encrypted text from peer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnTEST2" />
+
+    <EditText
+        android:id="@+id/outputEditText"
+        android:hint="Unencrypted output"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/encryptedEditText"/>
 
 </RelativeLayout>

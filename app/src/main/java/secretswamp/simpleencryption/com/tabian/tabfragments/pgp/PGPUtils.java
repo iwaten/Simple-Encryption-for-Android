@@ -1,10 +1,11 @@
-package secretswamp.simpleencryption.pgp;
+package secretswamp.simpleencryption.com.tabian.tabfragments.pgp;
 
 import java.nio.file.Files;
 import java.security.*;
 import javax.crypto.*;
 import java.io.*;
 import java.security.spec.InvalidKeySpecException;
+import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 
 import android.util.Base64;
@@ -12,6 +13,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 public class PGPUtils {
     private PGPUtils (){
+
     }
 
     private static SecretKey generateDataEncryptionKey(){
@@ -94,47 +96,12 @@ public class PGPUtils {
         KeyPair keys = null;
         try{
             keyGen = KeyPairGenerator.getInstance("RSA");
+            keyGen.initialize(1024);
             keys = keyGen.generateKeyPair();
         }catch(GeneralSecurityException e){
             e.printStackTrace();
         }
         return keys;
-    }
-
-    public static boolean doesKeyPairExist() {
-        File privateKeyFile = new File("keypair.key");
-        File publicKeyFile = new File("keypair.pub");
-
-        // Check to see if the keys already exist (and not overwriting) before generating the keypair.
-        if(privateKeyFile.exists() && publicKeyFile.exists()) {
-            System.out.println("A keypair already exists.");
-            return true;
-        }
-        return false;
-    }
-
-    public static PublicKey retrievePublicKey() {
-        File file = new File("keypair.pub");
-        PublicKey pk = null;
-        byte[] data = new byte[(int) file.length()];
-        try {
-            DataInputStream dis = new DataInputStream(new FileInputStream(file));
-            dis.readFully(data);
-            dis.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        X509EncodedKeySpec ks = new X509EncodedKeySpec(data);
-        try {
-            KeyFactory kf = KeyFactory.getInstance("RSA");
-            pk = kf.generatePublic(ks);
-        } catch(NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch(InvalidKeySpecException e) {
-            e.printStackTrace();
-        }
-        return pk;
     }
 
     private static Cipher generateKeyOperationCipher(){
@@ -178,6 +145,41 @@ public class PGPUtils {
         byte bytes[] = new byte[124];
         random.nextBytes(bytes);
         return random;
+    }
+
+    public static String encodeKey(Key k) {
+        String encodedKey = Base64.encodeToString(k.getEncoded(), Base64.DEFAULT);
+
+        return encodedKey;
+    }
+
+    public static Key decodeKey(String encodedKey, boolean isPrivate) {
+        if(encodedKey.length() == 0) {
+            return null;
+        }
+
+        Key k = null;
+        byte[] key = Base64.decode(encodedKey, Base64.DEFAULT);
+        KeyFactory kf = null;
+        try {
+            kf = KeyFactory.getInstance("RSA"); // or "EC" or whatever
+        } catch(NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        if(isPrivate) {
+            try {
+                k = kf.generatePrivate(new PKCS8EncodedKeySpec(key));
+            } catch(InvalidKeySpecException e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                k = kf.generatePublic(new X509EncodedKeySpec(key));
+            } catch (InvalidKeySpecException e) {
+                e.printStackTrace();
+            }
+        }
+        return k;
     }
 
 
