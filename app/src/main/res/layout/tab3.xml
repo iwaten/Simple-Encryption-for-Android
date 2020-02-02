@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -12,25 +11,25 @@
         android:text="ENCRYPT!"/>
 
     <EditText
-        android:id="@+id/pubkeyEditText"
+        android:id="@+id/pubkeytext"
         android:hint="Peer's public key"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/btnTEST3"/>
 
     <EditText
-        android:id="@+id/userinputEditText"
+        android:id="@+id/userinputtext"
         android:hint="Message you want to encrypt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/pubkeyEditText"/>
+        android:layout_below="@+id/pubkeytext"/>
 
     <EditText
-        android:id="@+id/outputEditText"
+        android:id="@+id/outputtext"
         android:hint="Encrypted output"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/userinputEditText"/>
+        android:layout_below="@+id/userinputtext"/>
 
 
 </RelativeLayout>

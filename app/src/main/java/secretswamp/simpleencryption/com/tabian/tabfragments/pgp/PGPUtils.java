@@ -56,7 +56,7 @@ public class PGPUtils {
             String encryptedSecretKey = encryptSecretKey(generateKeyOperationCipher(), recipientPublicKey, secretKey);
 
             // Final message to transmit contains the data and the encrypted secret key
-            output = Base64.encodeToString(encryptedData, Base64.DEFAULT) + encryptedSecretKey;
+            output = encryptedSecretKey + "," + Base64.encodeToString(encryptedData, Base64.DEFAULT);
         }catch(GeneralSecurityException e){
             e.printStackTrace();
         }catch(UnsupportedEncodingException e){
@@ -69,9 +69,9 @@ public class PGPUtils {
         String output = "";
         try{
             // Split the data and encrypted secret key
-            int splitIndex = encryptedMessage.indexOf('=')+2;
-            String base64EncryptedData = encryptedMessage.substring(0, splitIndex);
-            String encryptedSecretKey = encryptedMessage.substring(splitIndex);
+            int splitIndex = encryptedMessage.indexOf(",");
+            String encryptedSecretKey = encryptedMessage.substring(0, splitIndex);
+            String base64EncryptedData= encryptedMessage.substring(splitIndex+1);
 
             // Decrypt the key with own private key
             SecretKey secretKey = decryptSecretKey(generateKeyOperationCipher(), myPrivateKey, encryptedSecretKey);
@@ -127,13 +127,13 @@ public class PGPUtils {
         return output;
     }
 
-    private static SecretKey decryptSecretKey(Cipher keyCipher,Key privateKey,String encryptedData){
+    private static SecretKey decryptSecretKey(Cipher keyCipher, Key privateKey, String encryptedData){
         SecretKey output = null;
         try{
-            keyCipher.init(Cipher.DECRYPT_MODE,privateKey);
+            keyCipher.init(Cipher.DECRYPT_MODE, privateKey);
             byte[] inputData = Base64.decode(encryptedData, Base64.DEFAULT);
-            byte[] decreyptedData = keyCipher.doFinal(inputData);
-            output = new SecretKeySpec(decreyptedData,"AES");
+            byte[] decryptedData = keyCipher.doFinal(inputData);
+            output = new SecretKeySpec(decryptedData,"AES");
         }catch(GeneralSecurityException e){
             e.printStackTrace();
         }
@@ -147,41 +147,38 @@ public class PGPUtils {
         return random;
     }
 
-    public static String encodeKey(Key k) {
-        String encodedKey = Base64.encodeToString(k.getEncoded(), Base64.DEFAULT);
-
-        return encodedKey;
+    public static String encodePublic(PublicKey pubKey) {
+        byte[] encodedPublicKey = pubKey.getEncoded();
+        return Base64.encodeToString(encodedPublicKey, Base64.DEFAULT);
     }
 
-    public static Key decodeKey(String encodedKey, boolean isPrivate) {
-        if(encodedKey.length() == 0) {
-            return null;
-        }
+    public static String encodePrivate(PrivateKey privKey) {
+        byte[] encodedPrivateKey = privKey.getEncoded();
+        return Base64.encodeToString(encodedPrivateKey, Base64.DEFAULT);
+    }
 
-        Key k = null;
-        byte[] key = Base64.decode(encodedKey, Base64.DEFAULT);
-        KeyFactory kf = null;
+    public static PublicKey decodePublic(String key) {
+        byte[] publicBytes = Base64.decode(key, Base64.DEFAULT);
+        X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publicBytes);
+        KeyFactory keyFactory;
+        PublicKey pubKey = null;
         try {
-            kf = KeyFactory.getInstance("RSA"); // or "EC" or whatever
-        } catch(NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        if(isPrivate) {
-            try {
-                k = kf.generatePrivate(new PKCS8EncodedKeySpec(key));
-            } catch(InvalidKeySpecException e) {
-                e.printStackTrace();
-            }
-        } else {
-            try {
-                k = kf.generatePublic(new X509EncodedKeySpec(key));
-            } catch (InvalidKeySpecException e) {
-                e.printStackTrace();
-            }
-        }
-        return k;
+            keyFactory = KeyFactory.getInstance("RSA");
+            pubKey = keyFactory.generatePublic(keySpec);
+        } catch(NoSuchAlgorithmException a) {} catch(InvalidKeySpecException b) {};
+        return pubKey;
     }
 
-
+    public static PrivateKey decodePrivate(String key) {
+        byte[] privateBytes = Base64.decode(key, Base64.DEFAULT);
+        PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(privateBytes);
+        KeyFactory keyFactory;
+        PrivateKey privKey = null;
+        try {
+            keyFactory = KeyFactory.getInstance("RSA");
+            privKey = keyFactory.generatePrivate(keySpec);
+        } catch(NoSuchAlgorithmException a) {} catch(InvalidKeySpecException b) {};
+        return privKey;
+    }
 
 }

@@ -25,7 +25,9 @@ public class Tab1Fragment extends Fragment {
     private static final String TAG = "Public Key Generator";
 
     private Button btnTEST;
-    public EditText keyEditText;
+    private EditText keyEditText;
+    private EditText privateKeyEditText;
+
 
     @Nullable
     @Override
@@ -33,6 +35,8 @@ public class Tab1Fragment extends Fragment {
         View view = inflater.inflate(secretswamp.simpleencryption.R.layout.tab1,container,false);
         btnTEST = (Button) view.findViewById(R.id.btnTEST);
         keyEditText = (EditText) (view.findViewById(R.id.generatedKey));
+        privateKeyEditText = (EditText) (view.findViewById(R.id.generatedPrivateKey));
+
         btnTEST.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
                 generateNewKeys(v);
@@ -45,13 +49,10 @@ public class Tab1Fragment extends Fragment {
         SharedPreferences pref = getActivity().getSharedPreferences("pref", Context.MODE_PRIVATE);
         KeyPair kp = PGPUtils.generateKeyPair();
         SharedPreferences.Editor editor = pref.edit();
-        editor.putString("pub-key", PGPUtils.encodeKey(kp.getPublic()));
-        editor.putString("priv-key", PGPUtils.encodeKey(kp.getPrivate()));
-        try{
-            keyEditText.setText(new String(Base64.encode(kp.getPublic().getEncoded(),0),"UTF-8"));
-        }catch(UnsupportedEncodingException e){
-            e.printStackTrace();
-        }
+        editor.putString("pub-key", PGPUtils.encodePublic(kp.getPublic()));
+        editor.putString("priv-key", PGPUtils.encodePrivate(kp.getPrivate()));
+        keyEditText.setText(PGPUtils.encodePublic(kp.getPublic()));
+        privateKeyEditText.setText(PGPUtils.encodePrivate(kp.getPrivate()));
 
     }
 }

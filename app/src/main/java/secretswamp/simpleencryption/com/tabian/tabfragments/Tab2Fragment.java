@@ -22,8 +22,6 @@ public class Tab2Fragment extends Fragment {
     private static final String TAG = "Tab2Fragment";
 
     private Button btnTEST;
-    private EditText message;
-    private EditText decMessageEditText;
 
     @Nullable
     @Override
@@ -34,24 +32,28 @@ public class Tab2Fragment extends Fragment {
         btnTEST.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getActivity(), "TESTING BUTTON CLICK 2",Toast.LENGTH_SHORT).show();
-                SharedPreferences pref = getActivity().getSharedPreferences("pref", Context.MODE_PRIVATE);
-                // Get data from "encrypted message" text box here (message = ...)
-                message = (EditText) (view.findViewById(R.id.encryptedEditText));
-                if(message == null) {
-                    return;
-                }
-
-                String decMessage = PGPUtils.decryptMessage(message.getText().toString(), (PrivateKey) PGPUtils.decodeKey(
-                        pref.getString("priv-key", null),
-                        true));
-                decMessageEditText = (EditText) (view.findViewById(R.id.outputEditText));
-                decMessageEditText.setText(decMessage);
-                // Should update the "decrypted message" text box here with decMessage
+                bruh();
 
             }
         });
 
         return view;
+    }
+
+    public void bruh() {
+        Toast.makeText(getActivity(), "TESTING BUTTON CLICK 2",Toast.LENGTH_SHORT).show();
+        SharedPreferences pref = getActivity().getSharedPreferences("pref", Context.MODE_PRIVATE);
+        // Get data from "encrypted message" text box here (message = ...)
+        String message;
+        try {
+            message = ((EditText) (getView().findViewById(R.id.encryptedEditText))).getText().toString();
+        } catch(NullPointerException e) {
+            return;
+        }
+        //message = message.replace("\n", "");
+        String decMessage = PGPUtils.decryptMessage(message, PGPUtils.decodePrivate(
+                pref.getString("priv-key", null)));
+        EditText decMessageEditText = (EditText) (getView().findViewById(R.id.outputEditText));
+        decMessageEditText.setText(decMessage);
     }
 }
