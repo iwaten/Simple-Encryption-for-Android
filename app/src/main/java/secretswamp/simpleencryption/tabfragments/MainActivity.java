@@ -1,4 +1,4 @@
-package secretswamp.simpleencryption.com.tabian.tabfragments;
+package secretswamp.simpleencryption.tabfragments;
 
 
 import android.content.Context;
@@ -11,7 +11,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
 
-import secretswamp.simpleencryption.com.tabian.tabfragments.pgp.PGPUtils;
+import secretswamp.simpleencryption.CryptUtils.CryptUtils;
 
 import java.security.KeyPair;
 
@@ -52,11 +52,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void checkSharedPreferences(SharedPreferences pref) {
-        KeyPair kp = PGPUtils.generateKeyPair();
+        KeyPair kp = CryptUtils.generateKeyPair();
         if(!pref.contains("pub-key") || !pref.contains("priv-key")) {
             SharedPreferences.Editor editor = pref.edit();
-            editor.putString("pub-key", PGPUtils.encodePublic(kp.getPublic()));
-            editor.putString("priv-key", PGPUtils.encodePrivate(kp.getPrivate()));
+            editor.putString("pub-key", CryptUtils.encodePublic(kp.getPublic()));
+            editor.putString("priv-key", CryptUtils.encodePrivate(kp.getPrivate()));
             editor.commit();
 
         }

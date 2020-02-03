@@ -1,4 +1,4 @@
-package secretswamp.simpleencryption.com.tabian.tabfragments;
+package secretswamp.simpleencryption.tabfragments;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -8,15 +8,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import secretswamp.simpleencryption.R;
-import secretswamp.simpleencryption.com.tabian.tabfragments.pgp.PGPUtils;
+import secretswamp.simpleencryption.CryptUtils.CryptUtils;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
-import java.security.PrivateKey;
 
 public class Tab2Fragment extends Fragment {
     private static final String TAG = "Tab2Fragment";
@@ -50,7 +47,7 @@ public class Tab2Fragment extends Fragment {
             return;
         }
         //message = message.replace("\n", "");
-        String decMessage = PGPUtils.decryptMessage(message, PGPUtils.decodePrivate(
+        String decMessage = CryptUtils.decryptMessage(message, CryptUtils.decodePrivate(
                 pref.getString("priv-key", null)));
         EditText decMessageEditText = (EditText) (getView().findViewById(R.id.outputEditText));
         decMessageEditText.setText(decMessage);

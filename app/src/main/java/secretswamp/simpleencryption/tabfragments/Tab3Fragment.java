@@ -1,4 +1,4 @@
-package secretswamp.simpleencryption.com.tabian.tabfragments;
+package secretswamp.simpleencryption.tabfragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,7 +9,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import secretswamp.simpleencryption.R;
-import secretswamp.simpleencryption.com.tabian.tabfragments.pgp.PGPUtils;
+import secretswamp.simpleencryption.CryptUtils.CryptUtils;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -48,7 +48,7 @@ public class Tab3Fragment extends Fragment {
             return;
         }
 
-        String encMessage = PGPUtils.encryptMessage(userInput, (PublicKey) PGPUtils.decodePublic(pubKey));
+        String encMessage = CryptUtils.encryptMessage(userInput, (PublicKey) CryptUtils.decodePublic(pubKey));
         ((EditText)getView().findViewById(R.id.outputtext)).setText(encMessage);
     }
 }

@@ -1,4 +1,4 @@
-package secretswamp.simpleencryption.com.tabian.tabfragments;
+package secretswamp.simpleencryption.tabfragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -7,15 +7,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 import android.content.SharedPreferences;
-import android.util.Base64;
 
-import java.io.UnsupportedEncodingException;
 import java.security.KeyPair;
 
 import secretswamp.simpleencryption.R;
-import secretswamp.simpleencryption.com.tabian.tabfragments.pgp.PGPUtils;
+import secretswamp.simpleencryption.CryptUtils.CryptUtils;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -47,12 +44,12 @@ public class Tab1Fragment extends Fragment {
 
     public void generateNewKeys(View view) {
         SharedPreferences pref = getActivity().getSharedPreferences("pref", Context.MODE_PRIVATE);
-        KeyPair kp = PGPUtils.generateKeyPair();
+        KeyPair kp = CryptUtils.generateKeyPair();
         SharedPreferences.Editor editor = pref.edit();
-        editor.putString("pub-key", PGPUtils.encodePublic(kp.getPublic()));
-        editor.putString("priv-key", PGPUtils.encodePrivate(kp.getPrivate()));
-        keyEditText.setText(PGPUtils.encodePublic(kp.getPublic()));
-        privateKeyEditText.setText(PGPUtils.encodePrivate(kp.getPrivate()));
+        editor.putString("pub-key", CryptUtils.encodePublic(kp.getPublic()));
+        editor.putString("priv-key", CryptUtils.encodePrivate(kp.getPrivate()));
+        keyEditText.setText(CryptUtils.encodePublic(kp.getPublic()));
+        privateKeyEditText.setText(CryptUtils.encodePrivate(kp.getPrivate()));
 
     }
 }
