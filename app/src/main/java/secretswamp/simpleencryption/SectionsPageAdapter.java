@@ -1,4 +1,4 @@
-package secretswamp.simpleencryption.tabfragments;
+package secretswamp.simpleencryption;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by User on 2/28/2017.
+ * Created by Claudia on 2/28/2017.
  */
 
 public class SectionsPageAdapter extends FragmentPagerAdapter {

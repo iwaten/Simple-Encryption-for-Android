@@ -1,4 +1,4 @@
-package secretswamp.simpleencryption.tabfragments;
+package secretswamp.simpleencryption;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,18 +8,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import secretswamp.simpleencryption.CryptUtils.CryptUtils;
+import secretswamp.simpleencryption.Crypt.CryptUtils;
+import secretswamp.simpleencryption.Crypt.KeyStore;
 import secretswamp.simpleencryption.R;
-import secretswamp.simpleencryption.tabfragments.MainActivity;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import java.security.PublicKey;
 
-
-public class Tab3Fragment extends Fragment {
-    private static final String TAG = "Tab3Fragment";
+public class EncryptMessageFragment extends Fragment {
+    private static final String TAG = "encrypt";
 
     private Button btnTEST;
     @Nullable
@@ -39,24 +37,24 @@ public class Tab3Fragment extends Fragment {
     }
 
     public void bruh() {
-        Toast.makeText(getActivity(), "Encrypting",Toast.LENGTH_SHORT).show();
-        String userInput;
-        String encryptionKey;
+        Toast.makeText(getActivity(), "Encrypting...", Toast.LENGTH_SHORT).show();
+        String messageToEncrypt;
+        String recipientPublicKey;
         KeyStore keys = KeyStore.getKeyStoreInstance();
         keys.loadKeys(getContext());
         try {
-            encryptionKey = ((EditText) (getView().findViewById(R.id.pubkeytext))).getText().toString();
-            userInput = ((EditText) (getView().findViewById(R.id.userinputtext))).getText().toString();
+            messageToEncrypt = ((EditText) (getView().findViewById(R.id.userinputtext))).getText().toString();
+            recipientPublicKey = ((EditText) (getView().findViewById(R.id.pubkeytext))).getText().toString();
         } catch (NullPointerException e) {
             return;
         }
-        if(userInput.length() != 0 && encryptionKey.length() != 0){
-            Toast.makeText(getActivity(), "Encrypting",Toast.LENGTH_SHORT).show();
-            String encMessage = CryptUtils.encryptMessage(userInput,keys.getMyPublicKey() );
-            Toast.makeText(getActivity(), "Encryption complete",Toast.LENGTH_SHORT).show();
+        if(messageToEncrypt.length() != 0 && recipientPublicKey.length() != 0){
+            Toast.makeText(getActivity(), "Encrypting...",Toast.LENGTH_SHORT).show();
+            String encMessage = CryptUtils.encryptMessage(messageToEncrypt, CryptUtils.decodePublicKeyFromBase64(recipientPublicKey));
+            Toast.makeText(getActivity(), "Encryption complete.",Toast.LENGTH_SHORT).show();
             ((EditText)getView().findViewById(R.id.outputtext)).setText(encMessage);
         }else{
-            Toast.makeText(getActivity(), "Missing either the key or the data",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Please include key and data.",Toast.LENGTH_SHORT).show();
         }
 
     }
