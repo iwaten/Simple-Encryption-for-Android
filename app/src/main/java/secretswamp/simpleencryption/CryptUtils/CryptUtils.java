@@ -1,6 +1,5 @@
-package secretswamp.simpleencryption.com.tabian.tabfragments.pgp;
+package secretswamp.simpleencryption.CryptUtils;
 
-import java.nio.file.Files;
 import java.security.*;
 import javax.crypto.*;
 import java.io.*;
@@ -11,8 +10,8 @@ import java.security.spec.X509EncodedKeySpec;
 import android.util.Base64;
 import javax.crypto.spec.SecretKeySpec;
 
-public class PGPUtils {
-    private PGPUtils (){
+public class CryptUtils {
+    private CryptUtils(){
 
     }
 

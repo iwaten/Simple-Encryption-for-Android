@@ -1,5 +1,4 @@
-package secretswamp.simpleencryption.com.tabian.tabfragments;
-
+package secretswamp.simpleencryption.tabfragments;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -11,7 +10,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import secretswamp.simpleencryption.R;
-import secretswamp.simpleencryption.com.tabian.tabfragments.pgp.PGPUtils;
+import secretswamp.simpleencryption.CryptUtils.CryptUtils;
+import secretswamp.simpleencryption.tabfragments.MainActivity;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -26,7 +26,7 @@ public class Tab2Fragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(secretswamp.simpleencryption.R.layout.tab2,container,false);
+        View view = inflater.inflate(secretswamp.simpleencryption.R.layout.tab2, container, false);
         btnTEST = (Button) view.findViewById(secretswamp.simpleencryption.R.id.btnTEST2);
 
         btnTEST.setOnClickListener(new View.OnClickListener() {
@@ -41,18 +41,26 @@ public class Tab2Fragment extends Fragment {
     }
 
     public void bruh() {
-        SharedPreferences pref = getActivity().getSharedPreferences("pref", Context.MODE_PRIVATE);
+        //SharedPreferences pref = getActivity().getSharedPreferences("pref", Context.MODE_PRIVATE);
         // Get data from "encrypted message" text box here (message = ...)
         String message;
+        KeyStore keys = KeyStore.getKeyStoreInstance();
+        keys.loadKeys(getContext());
         try {
             message = ((EditText) (getView().findViewById(R.id.encryptedEditText))).getText().toString();
-        } catch(NullPointerException e) {
+        } catch (NullPointerException e) {
             return;
         }
         //message = message.replace("\n", "");
-        String decMessage = PGPUtils.decryptMessage(message, PGPUtils.decodePrivate(
-                pref.getString("priv-key", null)));
-        EditText decMessageEditText = (EditText) (getView().findViewById(R.id.outputEditText));
-        decMessageEditText.setText(decMessage);
+        if (((EditText) (getView().findViewById(R.id.encryptedEditText))).getText().toString().length() != 0) {
+            Toast.makeText(getActivity(), "Decrypting", Toast.LENGTH_SHORT).show();
+            String decMessage = CryptUtils.decryptMessage(message, keys.getMyPrivateKey());
+            EditText decMessageEditText = (EditText) (getView().findViewById(R.id.outputEditText));
+            Toast.makeText(getActivity(), "Decrypting complete", Toast.LENGTH_SHORT).show();
+            decMessageEditText.setText(decMessage);
+        } else {
+            Toast.makeText(getActivity(), "Nothing to decrypt", Toast.LENGTH_SHORT).show();
+        }
+
     }
 }

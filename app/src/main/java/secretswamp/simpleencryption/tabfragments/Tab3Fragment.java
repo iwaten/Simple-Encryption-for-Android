@@ -1,4 +1,4 @@
-package secretswamp.simpleencryption.com.tabian.tabfragments;
+package secretswamp.simpleencryption.tabfragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,8 +8,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import secretswamp.simpleencryption.CryptUtils.CryptUtils;
 import secretswamp.simpleencryption.R;
-import secretswamp.simpleencryption.com.tabian.tabfragments.pgp.PGPUtils;
+import secretswamp.simpleencryption.tabfragments.MainActivity;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -38,17 +39,25 @@ public class Tab3Fragment extends Fragment {
     }
 
     public void bruh() {
-        Toast.makeText(getActivity(), "TESTING BUTTON CLICK 3",Toast.LENGTH_SHORT).show();
-        String pubKey;
+        Toast.makeText(getActivity(), "Encrypting",Toast.LENGTH_SHORT).show();
         String userInput;
+        String encryptionKey;
+        KeyStore keys = KeyStore.getKeyStoreInstance();
+        keys.loadKeys(getContext());
         try {
-        pubKey = ((EditText) (getView().findViewById(R.id.pubkeytext))).getText().toString();
-        userInput = ((EditText) (getView().findViewById(R.id.userinputtext))).getText().toString();
+            encryptionKey = ((EditText) (getView().findViewById(R.id.pubkeytext))).getText().toString();
+            userInput = ((EditText) (getView().findViewById(R.id.userinputtext))).getText().toString();
         } catch (NullPointerException e) {
             return;
         }
+        if(userInput.length() != 0 && encryptionKey.length() != 0){
+            Toast.makeText(getActivity(), "Encrypting",Toast.LENGTH_SHORT).show();
+            String encMessage = CryptUtils.encryptMessage(userInput,keys.getMyPublicKey() );
+            Toast.makeText(getActivity(), "Encryption complete",Toast.LENGTH_SHORT).show();
+            ((EditText)getView().findViewById(R.id.outputtext)).setText(encMessage);
+        }else{
+            Toast.makeText(getActivity(), "Missing either the key or the data",Toast.LENGTH_SHORT).show();
+        }
 
-        String encMessage = PGPUtils.encryptMessage(userInput, (PublicKey) PGPUtils.decodePublic(pubKey));
-        ((EditText)getView().findViewById(R.id.outputtext)).setText(encMessage);
     }
 }
