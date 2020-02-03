@@ -7,12 +7,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 import android.content.SharedPreferences;
+import android.util.Base64;
 
+import java.io.UnsupportedEncodingException;
 import java.security.KeyPair;
 
 import secretswamp.simpleencryption.R;
 import secretswamp.simpleencryption.CryptUtils.CryptUtils;
+import secretswamp.simpleencryption.tabfragments.MainActivity;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -29,27 +33,35 @@ public class Tab1Fragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(secretswamp.simpleencryption.R.layout.tab1,container,false);
+        View view = inflater.inflate(secretswamp.simpleencryption.R.layout.tab1, container, false);
         btnTEST = (Button) view.findViewById(R.id.btnTEST);
         keyEditText = (EditText) (view.findViewById(R.id.generatedKey));
-        privateKeyEditText = (EditText) (view.findViewById(R.id.generatedPrivateKey));
+        //privateKeyEditText = (EditText) (view.findViewById(R.id.generatedPrivateKey));
 
-        btnTEST.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v){
+        btnTEST.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
                 generateNewKeys(v);
             }
         });
         return view;
     }
 
-    public void generateNewKeys(View view) {
-        SharedPreferences pref = getActivity().getSharedPreferences("pref", Context.MODE_PRIVATE);
+    private void generateNewKeys(View view) {
+        //SharedPreferences pref = getActivity().getSharedPreferences("pref", Context.MODE_PRIVATE);
         KeyPair kp = CryptUtils.generateKeyPair();
-        SharedPreferences.Editor editor = pref.edit();
-        editor.putString("pub-key", CryptUtils.encodePublic(kp.getPublic()));
-        editor.putString("priv-key", CryptUtils.encodePrivate(kp.getPrivate()));
-        keyEditText.setText(CryptUtils.encodePublic(kp.getPublic()));
-        privateKeyEditText.setText(CryptUtils.encodePrivate(kp.getPrivate()));
-
+        KeyStore keys = KeyStore.getKeyStoreInstance();
+        keys.loadKeys(getContext());
+        keys.setMyPrivateKey(kp.getPrivate());
+        keys.setMyPublicKey(kp.getPublic());
+        keys.storeKeys(getContext());
+        //SharedPreferences.Editor editor = pref.edit();
+        //editor.putString("pub-key", PGPUtils.encodePublic(kp.getPublic()));
+        //editor.putString("priv-key", PGPUtils.encodePrivate(kp.getPrivate()));
+        try {
+            Toast.makeText(getActivity(), "New Public Key Generated", Toast.LENGTH_SHORT).show();
+            keyEditText.setText(new String(Base64.encode(keys.getMyPublicKey().getEncoded(), 0), "UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
     }
 }

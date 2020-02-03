@@ -1,4 +1,4 @@
-package secretswamp.simpleencryption.com.tabian.tabfragments;
+package secretswamp.simpleencryption.tabfragments;
 
 import java.security.*;
 import javax.crypto.*;

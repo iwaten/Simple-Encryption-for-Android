@@ -15,6 +15,11 @@ import secretswamp.simpleencryption.CryptUtils.CryptUtils;
 
 import java.security.KeyPair;
 
+import java.io.*;
+import java.security.*;
+import android.content.Context;
+import javax.crypto.*;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
@@ -39,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(mViewPager);
 
         SharedPreferences sharedPref = getSharedPreferences("pref", Context.MODE_PRIVATE);
-        checkSharedPreferences(sharedPref);
+        //checkSharedPreferences(sharedPref);
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -51,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /*
     private void checkSharedPreferences(SharedPreferences pref) {
         KeyPair kp = CryptUtils.generateKeyPair();
         if(!pref.contains("pub-key") || !pref.contains("priv-key")) {
@@ -60,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
             editor.commit();
 
         }
-    }
+    }*/
+
 
 }
